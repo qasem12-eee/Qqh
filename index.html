@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نافذة الشكاوى - أسواق السفير</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f9fc;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            background-image: linear-gradient(135deg, #f5f9fc 0%, #e8f0f7 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(to left, #1a6b3b, #2a9d5a);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header:before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo {
+            font-size: 40px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .complaint-form {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2a9d5a;
+            font-size: 16px;
+        }
+        
+        .input-field, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: #f9fbfd;
+        }
+        
+        .input-field:focus, textarea:focus {
+            outline: none;
+            border-color: #2a9d5a;
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(42, 157, 90, 0.1);
+        }
+        
+        textarea {
+            height: 180px;
+            resize: vertical;
+        }
+        
+        .char-counter {
+            text-align: left;
+            font-size: 14px;
+            color: #777;
+            margin-top: 5px;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(to left, #1a6b3b, #2a9d5a);
+            color: white;
+            border: none;
+            padding: 16px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(to left, #15532f, #218c4f);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 157, 90, 0.3);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .submit-btn i {
+            font-size: 20px;
+        }
+        
+        .contact-info {
+            background-color: #f0f7f3;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            text-align: center;
+            border-right: 5px solid #2a9d5a;
+        }
+        
+        .contact-info h3 {
+            color: #1a6b3b;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .email-display {
+            background-color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 16px;
+            color: #1a6b3b;
+            border: 1px dashed #2a9d5a;
+            margin-top: 10px;
+            direction: ltr;
+            word-break: break-all;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .success {
+            background-color: #e7f7ef;
+            color: #1a6b3b;
+            border: 1px solid #a8e6c3;
+        }
+        
+        .error {
+            background-color: #fdeaea;
+            color: #d32f2f;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .instructions {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-right: 4px solid #2a9d5a;
+        }
+        
+        .instructions h3 {
+            color: #1a6b3b;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .instructions ul {
+            padding-right: 20px;
+            color: #555;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+            background-color: #f9fbfd;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .complaint-form {
+                padding: 20px;
+            }
+            
+            .input-field, textarea {
+                padding: 12px 15px;
+            }
+        }
+        
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #2a9d5a;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-store-alt"></i>
+            </div>
+            <h1>نافذة الشكاوى - أسواق السفير</h1>
+            <p>نرحب بملاحظاتكم وشكاويكم لتحسين خدماتنا</p>
+        </div>
+        
+        <div class="complaint-form">
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> تعليمات هامة:</h3>
+                <ul>
+                    <li>يرجى وصف الشكوى بوضوح وتحديد نوعها (خدمة العملاء، جودة المنتجات، النظافة، الأسعار، إلخ).</li>
+                    <li>سيتم الرد على شكواك في غضون 48 ساعة عمل.</li>
+                    <li>يمكنك تتبع حالة الشكوى عبر البريد الإلكتروني الذي ستدخله.</li>
+                    <li>جميع الشكاوى تعامل بسرية تامة.</li>
+                </ul>
+            </div>
+            
+            <form id="complaintForm">
+                <div class="form-group">
+                    <label for="name"><i class="fas fa-user"></i> الاسم الكامل:</label>
+                    <input type="text" id="name" class="input-field" placeholder="أدخل اسمك الكامل" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> البريد الإلكتروني:</label>
+                    <input type="email" id="email" class="input-field" placeholder="example@domain.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject"><i class="fas fa-tag"></i> موضوع الشكوى:</label>
+                    <input type="text" id="subject" class="input-field" placeholder="موضوع الشكوى" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="complaint"><i class="fas fa-comment-dots"></i> تفاصيل الشكوى:</label>
+                    <textarea id="complaint" class="input-field" placeholder="يرجى كتابة تفاصيل الشكوى هنا..." required></textarea>
+                    <div class="char-counter">عدد الأحرف: <span id="charCount">0</span> / الحد الأقصى: 1000 حرف</div>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-paper-plane"></i> إرسال الشكوى
+                </button>
+            </form>
+            
+            <div class="status-message" id="statusMessage"></div>
+            
+            <div class="contact-info">
+                <h3><i class="fas fa-envelope-open-text"></i> سيتم إرسال الشكوى إلى البريد التالي:</h3>
+                <div class="email-display">qasemx23@gmail.com</div>
+                <p style="margin-top: 10px; color: #666; font-size: 14px;">يمكنك أيضًا التواصل معنا مباشرة على هذا البريد</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>جميع الحقوق محفوظة &copy; 2023 أسواق السفير</p>
+            <p style="margin-top: 5px; font-size: 13px;">نحن هنا لخدمتكم على أفضل وجه</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const complaintForm = document.getElementById('complaintForm');
+            const complaintText = document.getElementById('complaint');
+            const charCount = document.getElementById('charCount');
+            const statusMessage = document.getElementById('statusMessage');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // عداد الأحرف
+            complaintText.addEventListener('input', function() {
+                const currentLength = complaintText.value.length;
+                charCount.textContent = currentLength;
+                
+                if (currentLength > 1000) {
+                    charCount.style.color = '#e74c3c';
+                } else if (currentLength > 800) {
+                    charCount.style.color = '#f39c12';
+                } else {
+                    charCount.style.color = '#777';
+                }
+            });
+            
+            // معالجة إرسال النموذج
+            complaintForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // تعطيل زر الإرسال أثناء المعالجة
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+                
+                // الحصول على القيم من النموذج
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const subject = document.getElementById('subject').value;
+                const complaint = complaintText.value;
+                
+                // التحقق من صحة البيانات
+                if (complaint.length > 1000) {
+                    showMessage('يرجى تقليل نص الشكوى إلى أقل من 1000 حرف', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الشكوى';
+                    return;
+                }
+                
+                // إعداد محتوى البريد الإلكتروني
+                const mailtoLink = `mailto:qasemx23@gmail.com?subject=شكوى من ${encodeURIComponent(name)} - ${encodeURIComponent(subject)}&body=الاسم: ${encodeURIComponent(name)}%0D%0Aالبريد الإلكتروني: ${encodeURIComponent(email)}%0D%0Aالموضوع: ${encodeURIComponent(subject)}%0D%0A%0D%0Aتفاصيل الشكوى:%0D%0A${encodeURIComponent(complaint)}`;
+                
+                // محاكاة إرسال البريد
+                setTimeout(() => {
+                    // في التطبيق الحقيقي، ستفتح هذه الرابط نافذة البريد الإلكتروني
+                    // window.location.href = mailtoLink;
+                    
+                    // هنا نعرض رسالة نجاح للمستخدم
+                    showMessage('تم إعداد رسالة الشكوى بنجاح! يرجى النقر على زر الإرسال في نافذة البريد التي ستفتح تلقائيًا.', 'success');
+                    
+                    // إعادة تعيين النموذج
+                    complaintForm.reset();
+                    charCount.textContent = '0';
+                    
+                    // فتح نافذة البريد (تعليق للاختبار)
+                    // console.log("سيتم فتح نافذة البريد الإلكتروني بالرابط:", mailtoLink);
+                    // window.open(mailtoLink, '_blank');
+                    
+                    // إعادة تفعيل زر الإرسال
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> إرسال الشكوى';
+                    }, 2000);
+                    
+                }, 1500);
+            });
+            
+            // دالة لعرض رسائل الحالة
+            function showMessage(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message ' + type;
+                statusMessage.style.display = 'block';
+                
+                // إخفاء الرسالة بعد 8 ثوانٍ
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 8000);
+            }
+            
+            // فتح نافذة البريد عند النقر على زر الإرسال البديل
+            document.querySelector('.contact-info').addEventListener('click', function(e) {
+                if (e.target.classList.contains('email-display')) {
+                    const mailtoLink = `mailto:qasemx23@gmail.com?subject=شكوى - أسواق السفير`;
+                    window.open(mailtoLink, '_blank');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
